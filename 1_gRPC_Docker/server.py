@@ -8,10 +8,22 @@ import saludo_pb2_grpc
 
 PUERTO = 50051
 
+SALUDOS = {"es": "Hola", "en": "Hello", "fr": "Bonjour"}
+DESPEDIDAS = {"es": "Adiós", "en": "Goodbye", "fr": "Au revoir"}
+
+
 class Saludo(saludo_pb2_grpc.SaludoServicer):
     def Decir(self, request, context):
         print(f"Petición recibida de: {request.nombre}")
-        return saludo_pb2.Respuesta(mensaje=f"Hola {request.nombre}, soy {socket.gethostname()}")
+        # Si el idioma es desconocido (o viene vacío), se responde en español
+        saludo = SALUDOS.get(request.idioma, SALUDOS["es"])
+        return saludo_pb2.Respuesta(mensaje=f"{saludo} {request.nombre}, soy {socket.gethostname()}")
+
+    def Despedir(self, request, context):
+        print(f"Despedida de: {request.nombre}")
+        despedida = DESPEDIDAS.get(request.idioma, DESPEDIDAS["es"])
+        return saludo_pb2.Respuesta(mensaje=f"{despedida} {request.nombre}")
+
 
 def servir():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
