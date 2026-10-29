@@ -11,6 +11,8 @@ services:
   cliente:
     build: .
     image: grpc-img
+    container_name: cliente
+    hostname: cliente
     command: ["python3", "client.py"]
     environment:
       - SERVIDOR=servidor:50051
@@ -20,3 +22,4 @@ services:
 
 networks:
   grpc-net:
+    name: grpc-net
