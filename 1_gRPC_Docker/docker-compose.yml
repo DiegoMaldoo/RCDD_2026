@@ -1,4 +1,4 @@
-# Dos contenedores de la misma imagen conectados por gRPC
+# Un servidor y tres clientes de la misma imagen conectados por gRPC
 services:
   servidor:
     build: .
@@ -8,17 +8,38 @@ services:
     command: ["python3", "server.py"]
     networks: [grpc-net]
 
-  cliente:
+  cliente1:
     build: .
     image: grpc-img
-    container_name: cliente
-    hostname: cliente
+    container_name: cliente1
     command: ["python3", "client.py"]
     environment:
       - SERVIDOR=servidor:50051
+      - CLIENTE_ID=ana
     depends_on: [servidor]
     networks: [grpc-net]
 
+  cliente2:
+    build: .
+    image: grpc-img
+    container_name: cliente2
+    command: ["python3", "client.py"]
+    environment:
+      - SERVIDOR=servidor:50051
+      - CLIENTE_ID=beto
+    depends_on: [servidor]
+    networks: [grpc-net]
+
+  cliente3:
+    build: .
+    image: grpc-img
+    container_name: cliente3
+    command: ["python3", "client.py"]
+    environment:
+      - SERVIDOR=servidor:50051
+      - CLIENTE_ID=carla
+    depends_on: [servidor]
+    networks: [grpc-net]
 
 networks:
   grpc-net:

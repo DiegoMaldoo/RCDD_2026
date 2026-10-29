@@ -16,7 +16,8 @@ IDIOMAS = ["es", "en", "fr"]
 def ciclo():
     canal = grpc.insecure_channel(SERVIDOR)
     stub = saludo_pb2_grpc.SaludoStub(canal)
-    nombre = socket.gethostname()  # nombre del contenedor actual
+    # Nombre del cliente: CLIENTE_ID si existe; si no, el hostname del contenedor
+    nombre = os.environ.get("CLIENTE_ID", socket.gethostname())
 
     cnt = 0
     while True:
