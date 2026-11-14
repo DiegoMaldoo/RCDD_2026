@@ -1,46 +1,15 @@
-# Un servidor y tres clientes de la misma imagen conectados por gRPC
 services:
   servidor:
     build: .
-    image: grpc-img
-    container_name: servidor
-    hostname: servidor
+    image: 3_grpc_p2p
+    hostname: diegom-servidor
     command: ["python3", "server.py"]
-    networks: [grpc-net]
-
-  cliente1:
+    ports:
+      - "50051:50051"
+  cliente:
     build: .
-    image: grpc-img
-    container_name: cliente1
+    image: 3_grpc_p2p
+    hostname: diegom-cliente
     command: ["python3", "client.py"]
     environment:
-      - SERVIDOR=servidor:50051
-      - CLIENTE_ID=ana
-    depends_on: [servidor]
-    networks: [grpc-net]
-
-  cliente2:
-    build: .
-    image: grpc-img
-    container_name: cliente2
-    command: ["python3", "client.py"]
-    environment:
-      - SERVIDOR=servidor:50051
-      - CLIENTE_ID=beto
-    depends_on: [servidor]
-    networks: [grpc-net]
-
-  cliente3:
-    build: .
-    image: grpc-img
-    container_name: cliente3
-    command: ["python3", "client.py"]
-    environment:
-      - SERVIDOR=servidor:50051
-      - CLIENTE_ID=carla
-    depends_on: [servidor]
-    networks: [grpc-net]
-
-networks:
-  grpc-net:
-    name: grpc-net
+      - SERVIDOR=${SERVIDOR}
